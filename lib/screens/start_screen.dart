@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -25,6 +25,7 @@ class StartScreen extends StatelessWidget {
                   height: 55,
                   width: 250,
                   child: ElevatedButton(
+                    key: const Key('sign_in_button'),
                     onPressed: () {
                       Navigator.pushNamed(context, "/login");
                     },
@@ -41,6 +42,7 @@ class StartScreen extends StatelessWidget {
                   height: 55,
                   width: 250,
                   child: ElevatedButton(
+                    key: const Key('sign_up_button'),
                     onPressed: () {
                       Navigator.pushNamed(context, "/register");
                     },
