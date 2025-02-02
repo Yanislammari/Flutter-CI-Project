@@ -151,7 +151,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: const Text("Add Card"),
+                  child: const Text("Add Card"), 
                 ),
               ),
             ],
