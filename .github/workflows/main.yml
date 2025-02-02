@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - develop
+
 jobs:
   build:
     name: Build & Release
@@ -31,6 +32,10 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
       
+      # Ajout de la phase de test
+      - name: Run Unit Tests
+        run: flutter test test/main_test.dart
+
       - name: Build APK
         run: flutter build apk --debug
       
@@ -44,7 +49,7 @@ jobs:
           path: |
             build/app/outputs/flutter-apk/app-debug.apk
             build/app/outputs/bundle/release/app-app-debug.aab
-      
+
       - name: Extract version from pubspec.yaml
         id: extract_version
         run: |
@@ -59,21 +64,36 @@ jobs:
           else
             echo "TAG_EXISTS=false" >> $GITHUB_ENV
           fi
+
       - name: Modify Tag
         if: env.TAG_EXISTS == 'true'
         id: modify_tag
         run: |
           new_version="${{ env.VERSION }}-build-${{ github.run_number }}"
           echo "VERSION=$new_version" >> $GITHUB_ENV
-      
+
+      # Exécution de Fastlane pour capturer des screenshots iOS et Android
+      - name: Run Fastlane iOS Screenshots
+        run: |
+          cd ios
+          fastlane screenshots
+        env:
+          LANG: en_US.UTF-8
+
+      - name: Run Fastlane Android Screenshots
+        run: |
+          cd android
+          fastlane screenshots
+        env:
+          LANG: en_US.UTF-8
+
       - name: Upload APK TestApp.io
         uses: testappio/github-action@v5
         with:
           api_token: ${{secrets.TESTAPPIO_API_TOKEN}}
           app_id: ${{secrets.TESTAPPIO_APP_ID}}
-          file:  build/app/outputs/flutter-apk/app-debug.apk
+          file: build/app/outputs/flutter-apk/app-debug.apk
           release_notes: ""
           git_release_notes: true
           include_git_commit_id: false
           notify: true
-    

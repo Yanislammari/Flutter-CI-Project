@@ -1,0 +1,44 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Capture des screenshots pour iOS"
+  lane :screenshots do
+    capture_screenshots(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      devices: ["iPhone 14", "iPhone 12", "iPhone 11"], # liste des appareils pour capturer les screenshots
+      locale: "en_US",
+      output_directory: "./fastlane/screenshots"  # Dossier où enregistrer les screenshots
+    )
+  end
+
+  # Si tu veux générer et télécharger des screenshots dans App Store Connect, tu peux configurer une autre lane
+  desc "Generate and upload screenshots to App Store Connect"
+  lane :upload_screenshots do
+    capture_screenshots(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      output_directory: "./fastlane/screenshots"
+    )
+    deliver(
+      force: true, # Utiliser cette option si tu veux forcer le téléchargement
+      skip_metadata: true,
+      skip_screenshots: false
+    )
+  end
+end
