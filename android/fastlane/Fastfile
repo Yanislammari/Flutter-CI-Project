@@ -11,13 +11,13 @@ platform :android do
     gradle(task: "test")
   end
 
-  desc "Prendre des screenshots Android"
   lane :screenshots do
-    capture_screenshots(
-      output_directory: './fastlane/screenshots',  # Dossier pour stocker les screenshots
-      devices: ['Nexus 5', 'Pixel 4'],  # Appareils Android à utiliser pour capturer les screenshots
+    screengrab(
+      app_apk_path: "app/build/outputs/apk/debug/app-debug.apk",
+      tests_apk_path: "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk",
+      output_directory: "./fastlane/screenshots"
     )
-  end
+  end  
 
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
