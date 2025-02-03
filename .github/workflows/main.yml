@@ -36,19 +36,22 @@ jobs:
       - name: Run Unit Tests
         run: flutter test test/main_test.dart
 
-      - name: Build APK
+      # Construction de l'APK en mode debug (pour les tests)
+      - name: Build APK (Debug)
         run: flutter build apk --debug
       
-      - name: Build appBundle
-        run: flutter build appbundle
+      # Construction de l'App Bundle en mode release
+      - name: Build App Bundle (Release)
+        run: flutter build appbundle --release
       
+      # Upload des Artifacts Android
       - name: Upload Android Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Android Releases
           path: |
             build/app/outputs/flutter-apk/app-debug.apk
-            build/app/outputs/bundle/release/app-app-debug.aab
+            build/app/outputs/bundle/release/app-release.aab  # Assurez-vous de référencer le bon fichier AAB
 
       - name: Extract version from pubspec.yaml
         id: extract_version
@@ -87,12 +90,13 @@ jobs:
         env:
           LANG: en_US.UTF-8
 
-      - name: Upload APK TestApp.io
+      # Upload de l'App Bundle vers TestApp.io
+      - name: Upload App Bundle TestApp.io
         uses: testappio/github-action@v5
         with:
           api_token: ${{secrets.TESTAPPIO_API_TOKEN}}
           app_id: ${{secrets.TESTAPPIO_APP_ID}}
-          file: build/app/outputs/flutter-apk/app-debug.apk
+          file: build/app/outputs/bundle/release/app-release.aab  # Upload le fichier AAB au lieu de l'APK
           release_notes: ""
           git_release_notes: true
           include_git_commit_id: false
