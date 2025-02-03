@@ -14,6 +14,7 @@ platform :android do
   lane :screenshots do
     # Exécuter la commande Flutter pour construire l'APK
     sh("flutter build apk --release")
+    sh("flutter build apk --debug")
   
     # Utiliser screengrab pour capturer les screenshots avec l'APK généré
     screengrab(
