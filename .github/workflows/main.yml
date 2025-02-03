@@ -90,15 +90,11 @@ jobs:
         env:
           LANG: en_US.UTF-8
 
-      # Upload de l'App Bundle vers TestApp.io avec la spécification "android" pour le release
-      - name: Upload App Bundle TestApp.io
-        uses: testappio/github-action@v5
-        with:
-          api_token: ${{secrets.TESTAPPIO_API_TOKEN}}
-          app_id: ${{secrets.TESTAPPIO_APP_ID}}
-          file: build/app/outputs/bundle/release/app-release.aab  # Upload le fichier AAB
-          release_notes: ""
-          git_release_notes: true
-          include_git_commit_id: false
-          notify: true
-          release: android  # Spécifier que le release est pour Android
+      # Installer `ta-cli` et exécuter la commande manuellement avec l'option --release
+      - name: Install ta-cli
+        run: |
+          npm install -g ta-cli
+          
+      - name: Upload App Bundle to TestApp.io using ta-cli
+        run: |
+          ta-cli publish --apk build/app/outputs/flutter-apk/app-debug.apk --release android --api_token ${{secrets.TESTAPPIO_API_TOKEN}} --app_id ${{secrets.TESTAPPIO_APP_ID}}
