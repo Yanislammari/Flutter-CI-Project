@@ -36,23 +36,19 @@ jobs:
       - name: Run Unit Tests
         run: flutter test test/main_test.dart
 
-      # Construction de l'APK en mode debug (pour les tests)
-      - name: Build APK (Debug)
+      - name: Build APK
         run: flutter build apk --debug
       
-      # Construction de l'App Bundle en mode release
-      - name: Build App Bundle (Release)
-        run: flutter build appbundle --release
+      - name: Build appBundle
+        run: flutter build appbundle
       
-      # Upload des Artifacts Android
       - name: Upload Android Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Android Releases
           path: |
             build/app/outputs/flutter-apk/app-debug.apk
-            build/app/outputs/bundle/release/app-release.aab  # Assurez-vous de référencer le bon fichier AAB
-
+            build/app/outputs/bundle/release/app-app-debug.aab
       - name: Extract version from pubspec.yaml
         id: extract_version
         run: |
@@ -67,14 +63,12 @@ jobs:
           else
             echo "TAG_EXISTS=false" >> $GITHUB_ENV
           fi
-
       - name: Modify Tag
         if: env.TAG_EXISTS == 'true'
         id: modify_tag
         run: |
           new_version="${{ env.VERSION }}-build-${{ github.run_number }}"
           echo "VERSION=$new_version" >> $GITHUB_ENV
-
       # Exécution de Fastlane pour capturer des screenshots iOS et Android
       - name: Run Fastlane iOS Screenshots
         run: |
@@ -90,11 +84,13 @@ jobs:
         env:
           LANG: en_US.UTF-8
 
-      # Installer `ta-cli` et exécuter la commande manuellement avec l'option --release
-      - name: Install ta-cli
-        run: |
-          npm install -g ta-cli
-          
-      - name: Upload App Bundle to TestApp.io using ta-cli
-        run: |
-          ta-cli publish --apk build/app/outputs/flutter-apk/app-debug.apk --release android --api_token ${{secrets.TESTAPPIO_API_TOKEN}} --app_id ${{secrets.TESTAPPIO_APP_ID}}
+      - name: Upload APK TestApp.io
+        uses: testappio/github-action@v5
+        with:
+          api_token: ${{secrets.TESTAPPIO_API_TOKEN}}
+          app_id: ${{secrets.TESTAPPIO_APP_ID}}
+          file: build/app/outputs/flutter-apk/app-debug.apk
+          release_notes: ""
+          git_release_notes: true
+          include_git_commit_id: false
+          notify: true
