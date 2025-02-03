@@ -13,39 +13,23 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-## Android
+## iOS
 
-### android test
-
-```sh
-[bundle exec] fastlane android test
-```
-
-Exécute les tests
-
-### android screenshots
+### ios screenshots
 
 ```sh
-[bundle exec] fastlane android screenshots
+[bundle exec] fastlane ios screenshots
 ```
 
+Capture des screenshots pour iOS
 
-
-### android beta
+### ios upload_screenshots
 
 ```sh
-[bundle exec] fastlane android beta
+[bundle exec] fastlane ios upload_screenshots
 ```
 
-Submit a new Beta Build to Crashlytics Beta
-
-### android deploy
-
-```sh
-[bundle exec] fastlane android deploy
-```
-
-Deploy a new version to the Google Play
+Generate and upload screenshots to App Store Connect
 
 ----
 

@@ -69,14 +69,7 @@ jobs:
         run: |
           new_version="${{ env.VERSION }}-build-${{ github.run_number }}"
           echo "VERSION=$new_version" >> $GITHUB_ENV
-      # Exécution de Fastlane pour capturer des screenshots iOS et Android
-      - name: Run Fastlane iOS Screenshots
-        run: |
-          cd ios
-          fastlane screenshots
-        env:
-          LANG: en_US.UTF-8
-
+      # Exécution de Fastlane pour capturer des screenshots 
       - name: Run Fastlane Android Screenshots
         run: |
           cd android

@@ -12,12 +12,17 @@ platform :android do
   end
 
   lane :screenshots do
+    # Exécuter la commande Flutter pour construire l'APK
+    sh("flutter build apk --release")
+    
+    # Utiliser screengrab pour capturer les screenshots avec l'APK généré
     screengrab(
-      app_apk_path: "app/build/outputs/apk/debug/app-debug.apk",
-      tests_apk_path: "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk",
+      app_apk_path: File.expand_path("../../build/app/outputs/flutter-apk/app-release.apk", __dir__), 
+      tests_apk_path: File.expand_path("../../build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk", __dir__),
       output_directory: "./fastlane/screenshots"
     )
-  end  
+  end
+  
 
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do

@@ -11,13 +11,15 @@ platform :ios do
     capture_screenshots(
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
-      devices: ["iPhone 14", "iPhone 12", "iPhone 11"],  # Liste des appareils pour capturer les screenshots
-      locale: "en_US",
-      output_directory: "./fastlane/screenshots"  # Dossier où enregistrer les screenshots
+      devices: ["iPhone 16 Pro", "iPhone 16", "iPhone SE (3rd generation)"],
+      languages: ["en-US"],
+      output_directory: "./fastlane/screenshots",
+      number_of_retries: 1, # Réduit le nombre d’essais pour chaque écran
+      stop_after_first_error: true, # Arrête immédiatement en cas d'erreur
+      clear_previous_screenshots: true # Efface les anciennes captures avant de démarrer
     )
   end
 
-  # Si tu veux générer et télécharger des screenshots dans App Store Connect, tu peux configurer une autre lane
   desc "Generate and upload screenshots to App Store Connect"
   lane :upload_screenshots do
     capture_screenshots(
@@ -26,7 +28,7 @@ platform :ios do
       output_directory: "./fastlane/screenshots"
     )
     deliver(
-      force: true,  # Utiliser cette option si tu veux forcer le téléchargement
+      force: true,
       skip_metadata: true,
       skip_screenshots: false
     )
