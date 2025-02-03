@@ -90,14 +90,15 @@ jobs:
         env:
           LANG: en_US.UTF-8
 
-      # Upload de l'App Bundle vers TestApp.io
+      # Upload de l'App Bundle vers TestApp.io avec la spécification "android" pour le release
       - name: Upload App Bundle TestApp.io
         uses: testappio/github-action@v5
         with:
           api_token: ${{secrets.TESTAPPIO_API_TOKEN}}
           app_id: ${{secrets.TESTAPPIO_APP_ID}}
-          file: build/app/outputs/bundle/release/app-release.aab  # Upload le fichier AAB au lieu de l'APK
+          file: build/app/outputs/bundle/release/app-release.aab  # Upload le fichier AAB
           release_notes: ""
           git_release_notes: true
           include_git_commit_id: false
           notify: true
+          release: android  # Spécifier que le release est pour Android
