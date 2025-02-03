@@ -1,7 +1,17 @@
-# This file contains the fastlane.tools configuration for Android
+# This file contains the fastlane.tools configuration
 # You can find the documentation at https://docs.fastlane.tools
-# For a list of all available actions, check out https://docs.fastlane.tools/actions
-# For a list of all available plugins, check out https://docs.fastlane.tools/plugins/available-plugins
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
 
 default_platform(:android)
 
@@ -11,16 +21,11 @@ platform :android do
     gradle(task: "test")
   end
 
+  desc "Prendre des screenshots Android"
   lane :screenshots do
-    # Exécuter la commande Flutter pour construire l'APK
-    sh("flutter build apk --release")
-    sh("flutter build apk --debug")
-  
-    # Utiliser screengrab pour capturer les screenshots avec l'APK généré
-    screengrab(
-      app_apk_path: "./../build/app/outputs/flutter-apk/app-release.apk",
-      tests_apk_path: "./../build/app/outputs/flutter-apk/app-debug.apk",
-      output_directory: "./fastlane/screenshots"
+    capture_screenshots(
+      output_directory: './fastlane/screenshots',  # Dossier pour stocker les screenshots
+      devices: ['Nexus 5', 'Pixel 4'],  # Appareils Android à utiliser pour capturer les screenshots
     )
   end
 
